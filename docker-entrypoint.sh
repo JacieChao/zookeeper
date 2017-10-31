@@ -18,13 +18,8 @@ if [ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]; then
     echo "tickTime=$ZOO_TICK_TIME" >> "$CONFIG"
     echo "initLimit=$ZOO_INIT_LIMIT" >> "$CONFIG"
     echo "syncLimit=$ZOO_SYNC_LIMIT" >> "$CONFIG"
-	echo "test=$(hostname | awk -F'-' '{NF-=1;print}')" >> "$CONFIG"
-	echo "test1=$(hostname)" >> "$CONFIG"
-	echo "test2=$(hostname | awk -F'-' '{$NF="";print}')" >> "$CONFIG"
 	
-	echo "test=$(hostname | awk -F'-' '{NF-=1;print}')"
-	echo "test1=$(hostname)"
-	echo "test2=$(hostname | awk -F'-' '{$NF="";print}')"
+	echo "test=$(hostname | awk -F '-' '{ for(i=1;i<NF;i++) {str=str$i"-"}}{print str}')"
 
     # for server in $ZOO_SERVERS; do
     #     echo "$server" >> "$CONFIG"
@@ -34,7 +29,9 @@ if [ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]; then
     	if [ "$[count-1]" -eq "$(hostname | awk -F'-' '{print $NF}')" ];then
     		echo "server.$count=0.0.0.0:2888:3888:participant" >> "$CONFIG";
     	else
-        	echo "server.$count=zoo-$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
+        	#echo "server.$count=zoo-$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
+			#echo "hua-nong-jing-chao"|awk -F '-' '{ for(i=1;i<NF;i++) {str=str$i"-"}}{print str}'
+			echo "server.$count=$(hostname | awk -F '-' '{ for(i=1;i<NF;i++) {str=str$i"-"}}{print str}')$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
         fi
     done
 fi
