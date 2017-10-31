@@ -21,13 +21,17 @@ if [ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]; then
 	echo "test=$(hostname | awk -F'-' '{NF-=1;print}')" >> "$CONFIG"
 	echo "test1=$(hostname)" >> "$CONFIG"
 	echo "test2=$(hostname | awk -F'-' '{$NF="";print}')" >> "$CONFIG"
+	
+	echo "test=$(hostname | awk -F'-' '{NF-=1;print}')"
+	echo "test1=$(hostname)"
+	echo "test2=$(hostname | awk -F'-' '{$NF="";print}')"
 
     # for server in $ZOO_SERVERS; do
     #     echo "$server" >> "$CONFIG"
     # done
     for ((count=1; count<=$REPLICOUNT; ++count));
     do
-    	if [ "$[count-1]" -eq "$(hostname | awk -F'-' '{print $2}')" ];then
+    	if [ "$[count-1]" -eq "$(hostname | awk -F'-' '{print $NF}')" ];then
     		echo "server.$count=0.0.0.0:2888:3888:participant" >> "$CONFIG";
     	else
         	echo "server.$count=zoo-$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
@@ -38,7 +42,7 @@ fi
 # Write myid only if it doesn't exist
 if [ ! -f "$ZOO_DATA_DIR/myid" ]; then
 #    echo "${ZOO_MY_ID:-1}" > "$ZOO_DATA_DIR/myid"
-    zooId=$(hostname | awk -F'-' '{print $2}')
+    zooId=$(hostname | awk -F'-' '{print $NF}')
     echo "$[zooId+1]" > "$ZOO_DATA_DIR/myid"
 fi
 
