@@ -27,7 +27,8 @@ if [ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]; then
     	if [ "$[count-1]" -eq "$(hostname | awk -F'-' '{print $2}')" ];then
     		echo "server.$count=0.0.0.0:2888:3888:participant" >> "$CONFIG";
     	else
-        	echo "server.$count=zoo-$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
+        	#echo "server.$count=zoo-$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
+			echo "server.$count=$(hostname | awk -F'-' '{NF-=1;print}')-$[count-1].$DNS:2888:3888:participant" >> "$CONFIG";
         fi
     done
 fi
