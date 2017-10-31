@@ -18,6 +18,9 @@ if [ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]; then
     echo "tickTime=$ZOO_TICK_TIME" >> "$CONFIG"
     echo "initLimit=$ZOO_INIT_LIMIT" >> "$CONFIG"
     echo "syncLimit=$ZOO_SYNC_LIMIT" >> "$CONFIG"
+	echo "test=$(hostname | awk -F'-' '{NF-=1;print}')" >> "$CONFIG"
+	echo "test1=$(hostname)" >> "$CONFIG"
+	echo "test2=$(hostname | awk -F'-' '{$NF="";print}')" >> "$CONFIG"
 
     # for server in $ZOO_SERVERS; do
     #     echo "$server" >> "$CONFIG"
